@@ -1,0 +1,40 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { MessageCircle } from 'lucide-react'
+import { buildWhatsAppUrl } from '@/lib/utils'
+
+interface WhatsAppButtonProps {
+  phone: string
+  message?: string
+}
+
+export function WhatsAppButton({ phone, message }: WhatsAppButtonProps) {
+  const [visible, setVisible] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 400)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  if (!phone) return null
+
+  return (
+    <a
+      href={buildWhatsAppUrl(phone, message)}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Falar no WhatsApp"
+      className={`fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-[#1ebe5d] ${
+        visible
+          ? 'translate-y-0 opacity-100'
+          : 'pointer-events-none translate-y-4 opacity-0'
+      }`}
+    >
+      <MessageCircle className="h-7 w-7" fill="currentColor" />
+      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#25D366] opacity-40" />
+    </a>
+  )
+}
