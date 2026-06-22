@@ -42,13 +42,29 @@ export interface City {
   created_at: string
 }
 
+export interface NeighborhoodHighlight {
+  icon: string
+  label: string
+  value: string
+}
+
+export interface NeighborhoodPOI {
+  name: string
+  category: string
+  image: string
+}
+
 export interface Neighborhood {
   id: string
   name: string
   city_id: string | null
+  city_name: string | null
   slug: string
   description: string | null
   cover_image_url: string | null
+  tags: string[] | null
+  highlights: NeighborhoodHighlight[] | null
+  points_of_interest: NeighborhoodPOI[] | null
   seo_title: string | null
   seo_description: string | null
   is_active: boolean

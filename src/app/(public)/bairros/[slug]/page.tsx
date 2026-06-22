@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import type { LucideIcon } from 'lucide-react'
 import {
   ArrowRight,
   MapPin,
@@ -12,7 +13,19 @@ import {
   GraduationCap,
   Waves,
   Star,
+  Building2,
+  Car,
+  Heart,
+  Shield,
+  Zap,
+  Sun,
+  Coffee,
 } from 'lucide-react'
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  TrendingUp, Trees, ShoppingBag, GraduationCap, Waves, Star,
+  MapPin, Home, Building2, Car, Heart, Shield, Zap, Sun, Coffee,
+}
 import { PropertyCard } from '@/components/public/PropertyCard'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -337,8 +350,20 @@ export default async function NeighborhoodDetailPage({
     perPage: 6,
   })
 
+  // Prefer DB data, fall back to hardcoded editorial
   const ed = EDITORIAL[neighborhood.slug] ?? DEFAULT_EDITORIAL
   const heroImage = neighborhood.cover_image_url || ed.image
+  const tags = (neighborhood.tags && neighborhood.tags.length > 0) ? neighborhood.tags : ed.tags
+  const highlights = (neighborhood.highlights && neighborhood.highlights.length > 0)
+    ? neighborhood.highlights.map((h) => ({
+        icon: ICON_MAP[h.icon] ?? Home,
+        label: h.label,
+        value: h.value,
+      }))
+    : ed.highlights
+  const pois = (neighborhood.points_of_interest && neighborhood.points_of_interest.length > 0)
+    ? neighborhood.points_of_interest
+    : ed.pointsOfInterest
 
   return (
     <>
@@ -385,7 +410,7 @@ export default async function NeighborhoodDetailPage({
 
           {/* tags */}
           <div className="mt-6 flex flex-wrap gap-2">
-            {ed.tags.map((tag) => (
+            {tags.map((tag) => (
               <span
                 key={tag}
                 className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-medium text-white backdrop-blur-sm"
@@ -401,7 +426,7 @@ export default async function NeighborhoodDetailPage({
       <section className="border-b border-border bg-background">
         <div className="container-wide">
           <div className="grid grid-cols-2 divide-x divide-y divide-border md:grid-cols-4 md:divide-y-0">
-            {ed.highlights.map(({ icon: Icon, label, value }) => (
+            {highlights.map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-center gap-4 px-8 py-6">
                 <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-gold/10 text-brand-gold">
                   <Icon className="h-5 w-5" />
@@ -462,7 +487,7 @@ export default async function NeighborhoodDetailPage({
       </section>
 
       {/* ── Points of interest ── */}
-      {ed.pointsOfInterest.length > 0 && (
+      {pois.length > 0 && (
         <section className="bg-secondary/40 section-padding">
           <div className="container-wide">
             <p className="eyebrow mb-3">O que tem por aqui</p>
@@ -471,7 +496,7 @@ export default async function NeighborhoodDetailPage({
             </h2>
 
             <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {ed.pointsOfInterest.map((poi) => (
+              {pois.map((poi) => (
                 <div
                   key={poi.name}
                   className="group relative overflow-hidden rounded-xl bg-card shadow-sm border border-border"

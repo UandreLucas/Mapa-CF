@@ -61,17 +61,28 @@ export const propertySchema = z.object({
 
 export type PropertyFormValues = z.infer<typeof propertySchema>
 
+const highlightSchema = z.object({
+  icon: z.string(),
+  label: z.string(),
+  value: z.string(),
+})
+
+const poiSchema = z.object({
+  name: z.string(),
+  category: z.string(),
+  image: z.string(),
+})
+
 export const neighborhoodSchema = z.object({
   name: z.string().min(2, 'Informe o nome do bairro'),
   city_id: z.string().uuid().nullable().optional(),
+  city_name: z.string().optional().nullable(),
   slug: z.string().optional(),
   description: z.string().optional().nullable(),
-  cover_image_url: z
-    .string()
-    .url('URL inválida')
-    .or(z.literal(''))
-    .optional()
-    .nullable(),
+  cover_image_url: z.string().url('URL inválida').or(z.literal('')).optional().nullable(),
+  tags: z.array(z.string()).optional().nullable(),
+  highlights: z.array(highlightSchema).optional().nullable(),
+  points_of_interest: z.array(poiSchema).optional().nullable(),
   seo_title: z.string().optional().nullable(),
   seo_description: z.string().optional().nullable(),
   is_active: z.boolean().default(true),
