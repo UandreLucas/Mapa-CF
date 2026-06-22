@@ -150,24 +150,35 @@ export async function getPropertyBySlug(
   slug: string
 ): Promise<PropertyFull | null> {
   const supabase = createClient()
+
   const { data, error } = await supabase
     .from('properties')
-    .select('*, images:property_images(*), property_features(features(*))')
+    .select('*, images:property_images(*)')
     .eq('slug', slug)
     .is('deleted_at', null)
     .maybeSingle()
 
   if (error || !data) return null
 
-  const raw = data as Record<string, unknown>
-  const features: Feature[] = Array.isArray(raw.property_features)
-    ? (raw.property_features as Array<{ features: Feature }>)
-        .map((pf) => pf.features)
+  // Fetch features separately to avoid PostgREST junction table ambiguity
+  let features: Feature[] = []
+  try {
+    const { data: pfRows } = await supabase
+      .from('property_features')
+      .select('features(*)')
+      .eq('property_id', data.id)
+
+    if (pfRows) {
+      features = pfRows
+        .map((row: Record<string, unknown>) => row.features as Feature)
         .filter(Boolean)
-    : []
+    }
+  } catch {
+    // features not critical — continue without them
+  }
 
   return {
-    ...(raw as unknown as PropertyFull),
+    ...(data as unknown as PropertyFull),
     features,
   }
 }

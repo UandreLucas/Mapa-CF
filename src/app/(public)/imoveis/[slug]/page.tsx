@@ -74,10 +74,17 @@ export default async function PropertyDetailPage({
 }: {
   params: { slug: string }
 }) {
-  const [property, settings] = await Promise.all([
-    getPropertyBySlug(params.slug),
-    getSettings(),
-  ])
+  let property: Awaited<ReturnType<typeof getPropertyBySlug>> = null
+  let settings: Awaited<ReturnType<typeof getSettings>>
+
+  try {
+    ;[property, settings] = await Promise.all([
+      getPropertyBySlug(params.slug),
+      getSettings(),
+    ])
+  } catch {
+    settings = (await import('@/types').then((m) => m.DEFAULT_SETTINGS)) as Awaited<ReturnType<typeof getSettings>>
+  }
 
   if (!property) notFound()
 
