@@ -41,9 +41,18 @@ async function fetchProperty(slug: string): Promise<PropertyFull | null> {
       .select('*, images:property_images(*)')
       .eq('slug', slug)
       .is('deleted_at', null)
+      .order('display_order', { referencedTable: 'property_images', ascending: true })
       .maybeSingle()
 
     if (error || !data) return null
+
+    // Ensure images are sorted by display_order (defensive)
+    if (Array.isArray(data.images)) {
+      data.images.sort(
+        (a: { display_order: number }, b: { display_order: number }) =>
+          (a.display_order ?? 0) - (b.display_order ?? 0)
+      )
+    }
 
     // Separate features query
     let features: { id: string; name: string; category: string | null; icon: string | null }[] = []

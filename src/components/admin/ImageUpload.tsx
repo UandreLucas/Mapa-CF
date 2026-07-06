@@ -2,7 +2,7 @@
 
 import { useState, useRef } from 'react'
 import Image from 'next/image'
-import { Upload, X, Star, Loader2, LinkIcon, Plus } from 'lucide-react'
+import { Upload, X, Star, Loader2, LinkIcon, Plus, GripVertical } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -28,6 +28,8 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = useState(false)
   const [urlInput, setUrlInput] = useState('')
+  const [dragIndex, setDragIndex] = useState<number | null>(null)
+  const [overIndex, setOverIndex] = useState<number | null>(null)
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || !files.length) return
@@ -95,6 +97,21 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
     onChange(value.map((img, i) => ({ ...img, is_cover: i === index })))
   }
 
+  /** Move image from one position to another and re-index display_order. */
+  const reorder = (from: number, to: number) => {
+    if (from === to) return
+    const next = [...value]
+    const [moved] = next.splice(from, 1)
+    next.splice(to, 0, moved)
+    onChange(next.map((img, i) => ({ ...img, display_order: i })))
+  }
+
+  const handleDrop = (target: number) => {
+    if (dragIndex !== null) reorder(dragIndex, target)
+    setDragIndex(null)
+    setOverIndex(null)
+  }
+
   return (
     <div className="space-y-4">
       {/* Drop zone */}
@@ -153,53 +170,81 @@ export function ImageUpload({ value, onChange }: ImageUploadProps) {
 
       {/* Grid */}
       {value.length > 0 && (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-          {value.map((img, i) => (
-            <div
-              key={`${img.url}-${i}`}
-              className={cn(
-                'group relative aspect-square overflow-hidden rounded-lg border-2',
-                img.is_cover ? 'border-brand-gold' : 'border-transparent'
-              )}
-            >
-              <Image
-                src={img.url}
-                alt={img.alt || `Imagem ${i + 1}`}
-                fill
-                sizes="200px"
-                className="object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-                <button
-                  type="button"
-                  onClick={() => setCover(i)}
-                  className="rounded-full bg-white/90 p-2 text-brand-navy hover:bg-white"
-                  title="Definir como capa"
-                >
-                  <Star
-                    className={cn(
-                      'h-4 w-4',
-                      img.is_cover && 'fill-brand-gold text-brand-gold'
-                    )}
-                  />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => remove(i)}
-                  className="rounded-full bg-white/90 p-2 text-destructive hover:bg-white"
-                  title="Remover"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              {img.is_cover && (
-                <span className="absolute left-1.5 top-1.5 rounded bg-brand-gold px-1.5 py-0.5 text-[10px] font-semibold text-brand-navy">
-                  Capa
+        <>
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <GripVertical className="h-3.5 w-3.5" />
+            Arraste as imagens para reordenar. A primeira ordem define a sequência da galeria.
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+            {value.map((img, i) => (
+              <div
+                key={`${img.url}-${i}`}
+                draggable
+                onDragStart={() => setDragIndex(i)}
+                onDragEnter={() => setOverIndex(i)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => handleDrop(i)}
+                onDragEnd={() => {
+                  setDragIndex(null)
+                  setOverIndex(null)
+                }}
+                className={cn(
+                  'group relative aspect-square cursor-grab overflow-hidden rounded-lg border-2 transition-all active:cursor-grabbing',
+                  img.is_cover ? 'border-brand-gold' : 'border-transparent',
+                  dragIndex === i && 'opacity-40',
+                  overIndex === i && dragIndex !== i && 'ring-2 ring-brand-gold ring-offset-2'
+                )}
+              >
+                <Image
+                  src={img.url}
+                  alt={img.alt || `Imagem ${i + 1}`}
+                  fill
+                  sizes="200px"
+                  className="pointer-events-none object-cover"
+                />
+
+                {/* Position number */}
+                <span className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-black/60 text-[11px] font-semibold text-white">
+                  {i + 1}
                 </span>
-              )}
-            </div>
-          ))}
-        </div>
+
+                {/* Drag handle hint */}
+                <span className="absolute left-1.5 bottom-1.5 rounded bg-black/50 p-1 text-white opacity-0 transition-opacity group-hover:opacity-100">
+                  <GripVertical className="h-3.5 w-3.5" />
+                </span>
+
+                <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                  <button
+                    type="button"
+                    onClick={() => setCover(i)}
+                    className="rounded-full bg-white/90 p-2 text-brand-navy hover:bg-white"
+                    title="Definir como capa"
+                  >
+                    <Star
+                      className={cn(
+                        'h-4 w-4',
+                        img.is_cover && 'fill-brand-gold text-brand-gold'
+                      )}
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => remove(i)}
+                    className="rounded-full bg-white/90 p-2 text-destructive hover:bg-white"
+                    title="Remover"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+                {img.is_cover && (
+                  <span className="absolute left-1.5 top-1.5 rounded bg-brand-gold px-1.5 py-0.5 text-[10px] font-semibold text-brand-navy">
+                    Capa
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   )
