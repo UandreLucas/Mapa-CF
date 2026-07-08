@@ -504,12 +504,16 @@ export function PropertyForm({
 
             <div className="grid gap-5 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <Label htmlFor="video_url">URL do vídeo (YouTube/Vimeo)</Label>
+                <Label htmlFor="video_url">URL do vídeo</Label>
                 <Input
                   id="video_url"
-                  placeholder="https://youtube.com/..."
+                  placeholder="YouTube, Vimeo ou Google Drive"
                   {...register('video_url')}
                 />
+                <p className="text-xs text-muted-foreground">
+                  Aceita YouTube, Vimeo ou Google Drive. No Drive, compartilhe
+                  como &ldquo;qualquer pessoa com o link&rdquo;.
+                </p>
                 {errors.video_url && (
                   <p className="text-xs text-destructive">
                     {errors.video_url.message}

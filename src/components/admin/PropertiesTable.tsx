@@ -34,7 +34,7 @@ import {
   togglePropertyFlag,
 } from '@/app/admin/imoveis/actions'
 import {
-  formatCurrencyCompact,
+  formatCurrency,
   getPropertyTypeLabel,
   PROPERTY_STATUSES,
 } from '@/lib/utils'
@@ -158,7 +158,7 @@ export function PropertiesTable({
                     <td className="px-4 py-3 font-medium text-brand-navy">
                       {p.hide_price
                         ? 'Sob consulta'
-                        : formatCurrencyCompact(p.price)}
+                        : formatCurrency(p.price)}
                     </td>
                     <td className="px-4 py-3">
                       <Badge

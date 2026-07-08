@@ -370,5 +370,8 @@ function toEmbedUrl(url: string): string {
   if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`
   const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
   if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`
+  // Google Drive: drive.google.com/file/d/FILE_ID/view  ->  /preview
+  const driveMatch = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([\w-]+)/)
+  if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`
   return url
 }
