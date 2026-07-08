@@ -94,14 +94,14 @@ export interface SiteSettings {
 
 export const DEFAULT_SETTINGS: SiteSettings = {
   broker_name: 'Eduardo Vieira',
-  broker_creci: 'CRECI-PB 0000',
-  broker_phone: '(83) 99999-0000',
-  broker_whatsapp: '5583999990000',
-  broker_email: 'contato@eduardovieira.com.br',
+  broker_creci: 'CRECI-PB [NÚMERO]',
+  broker_phone: '(83) 8650-4782',
+  broker_whatsapp: '558386504782',
+  broker_email: 'corretoreduardovieira@gmail.com',
   broker_avatar: '',
   company_name: 'Eduardo Vieira Imóveis',
   company_address: 'João Pessoa, Paraíba',
-  company_instagram: 'https://instagram.com',
+  company_instagram: 'https://www.instagram.com/eduardovieiraimoveis/',
   company_facebook: '',
   company_youtube: '',
   company_bio:

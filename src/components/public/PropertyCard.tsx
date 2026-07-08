@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { BedDouble, Bath, Car, Maximize, MapPin, Heart } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { cn, formatCurrencyCompact, formatArea, getPropertyTypeLabel } from '@/lib/utils'
+import { cn, formatCurrency, formatArea, getPropertyTypeLabel } from '@/lib/utils'
 import type { PropertyWithImages } from '@/types'
 
 interface PropertyCardProps {
@@ -131,7 +131,7 @@ export function PropertyCard({ property, className, priority }: PropertyCardProp
             <p className="text-lg font-semibold text-brand-navy">Sob consulta</p>
           ) : (
             <p className="text-xl font-semibold text-brand-navy">
-              {formatCurrencyCompact(property.price)}
+              {formatCurrency(property.price)}
               {property.purpose === 'rent' && (
                 <span className="text-sm font-normal text-muted-foreground">
                   {' '}
