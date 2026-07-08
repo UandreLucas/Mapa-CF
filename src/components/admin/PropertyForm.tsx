@@ -93,6 +93,7 @@ export function PropertyForm({
       is_launch: initialData?.is_launch ?? false,
       is_furnished: initialData?.is_furnished ?? false,
       accepts_pets: initialData?.accepts_pets ?? false,
+      custom_badge: initialData?.custom_badge ?? '',
       seo_title: initialData?.seo_title ?? '',
       seo_description: initialData?.seo_description ?? '',
       features: initialData?.features ?? [],
@@ -296,6 +297,22 @@ export function PropertyForm({
                 checked={watch('is_launch')}
                 onChange={(v) => setValue('is_launch', v)}
               />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="custom_badge">Tag personalizada (opcional)</Label>
+              <Input
+                id="custom_badge"
+                maxLength={40}
+                placeholder="Ex.: Oportunidade · R$ 200 mil abaixo da tabela"
+                {...register('custom_badge')}
+              />
+              <p className="text-xs text-muted-foreground">
+                Aparece como etiqueta sobre a foto do imóvel no site (até 40 caracteres).
+              </p>
+              {errors.custom_badge && (
+                <p className="text-xs text-destructive">{errors.custom_badge.message}</p>
+              )}
             </div>
           </div>
         </TabsContent>

@@ -58,6 +58,11 @@ export function PropertyCard({ property, className, priority }: PropertyCardProp
 
         {/* Top badges */}
         <div className="absolute left-3 top-3 flex flex-wrap gap-2">
+          {property.custom_badge && (
+            <span className="rounded bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
+              {property.custom_badge}
+            </span>
+          )}
           {property.is_luxury && <Badge variant="luxury">Alto Padrão</Badge>}
           {property.is_launch && <Badge variant="gold">Lançamento</Badge>}
         </div>

@@ -199,6 +199,11 @@ export default async function PropertyDetailPage({
         <div className="container-wide py-6">
           <div className="mb-5 flex flex-wrap items-center gap-2">
             <Badge variant="gold">{purposeLabel}</Badge>
+            {property.custom_badge && (
+              <span className="rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white">
+                {property.custom_badge}
+              </span>
+            )}
             {property.is_luxury && <Badge variant="luxury">Alto Padrão</Badge>}
             {property.is_launch && <Badge variant="secondary">Lançamento</Badge>}
             <span className="ml-auto flex items-center gap-1.5 text-sm text-muted-foreground">

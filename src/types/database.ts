@@ -113,6 +113,7 @@ export interface Property {
   is_launch: boolean
   is_furnished: boolean
   accepts_pets: boolean
+  custom_badge: string | null
   available_from: string | null
   seo_title: string | null
   seo_description: string | null

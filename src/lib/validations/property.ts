@@ -43,6 +43,7 @@ export const propertySchema = z.object({
   is_launch: z.boolean().default(false),
   is_furnished: z.boolean().default(false),
   accepts_pets: z.boolean().default(false),
+  custom_badge: z.string().max(40, 'Máximo 40 caracteres').optional().nullable(),
   available_from: z.string().optional().nullable(),
   seo_title: z.string().optional().nullable(),
   seo_description: z.string().optional().nullable(),
