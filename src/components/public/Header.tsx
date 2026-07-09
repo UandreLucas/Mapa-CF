@@ -45,11 +45,18 @@ export function Header({ settings }: HeaderProps) {
     }
   }, [mobileOpen])
 
+  // Only pages with a full-bleed dark hero can use the transparent header.
+  const hasDarkHero =
+    pathname === '/' || /^\/bairros\/[^/]+$/.test(pathname)
+
+  // Solid header whenever scrolled OR the page has no dark hero behind it.
+  const solid = scrolled || !hasDarkHero
+
   return (
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-        scrolled
+        solid
           ? 'border-b border-border bg-background/95 backdrop-blur-md shadow-sm'
           : 'bg-transparent'
       )}
@@ -60,7 +67,7 @@ export function Header({ settings }: HeaderProps) {
           <span
             className={cn(
               'font-serif text-xl font-semibold tracking-tight transition-colors md:text-2xl',
-              scrolled ? 'text-brand-navy' : 'text-white'
+              solid ? 'text-brand-navy' : 'text-white'
             )}
           >
             Eduardo Vieira
@@ -68,7 +75,7 @@ export function Header({ settings }: HeaderProps) {
           <span
             className={cn(
               'text-[10px] font-medium uppercase tracking-[0.3em] transition-colors',
-              scrolled ? 'text-brand-gold' : 'text-brand-gold-light'
+              solid ? 'text-brand-gold' : 'text-brand-gold-light'
             )}
           >
             Imóveis · Alto Padrão
@@ -83,7 +90,7 @@ export function Header({ settings }: HeaderProps) {
               href={link.href}
               className={cn(
                 'text-sm font-medium transition-colors hover:text-brand-gold',
-                scrolled ? 'text-foreground/80' : 'text-white/90'
+                solid ? 'text-foreground/80' : 'text-white/90'
               )}
             >
               {link.label}
@@ -97,7 +104,7 @@ export function Header({ settings }: HeaderProps) {
             href={`tel:${settings.broker_phone}`}
             className={cn(
               'flex items-center gap-2 text-sm font-medium transition-colors hover:text-brand-gold',
-              scrolled ? 'text-foreground/80' : 'text-white/90'
+              solid ? 'text-foreground/80' : 'text-white/90'
             )}
           >
             <Phone className="h-4 w-4" />
@@ -122,7 +129,7 @@ export function Header({ settings }: HeaderProps) {
           type="button"
           className={cn(
             'lg:hidden',
-            scrolled ? 'text-brand-navy' : 'text-white'
+            solid ? 'text-brand-navy' : 'text-white'
           )}
           onClick={() => setMobileOpen((v) => !v)}
           aria-label="Abrir menu"
