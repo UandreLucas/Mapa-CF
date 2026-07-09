@@ -46,7 +46,7 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero />
+      <Hero imageUrl={settings.hero_image} />
 
       <PropertySection
         eyebrow="Seleção do corretor"

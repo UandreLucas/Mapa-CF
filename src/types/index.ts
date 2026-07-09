@@ -99,6 +99,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   broker_whatsapp: '558386504782',
   broker_email: 'corretoreduardovieira@gmail.com',
   broker_avatar: '',
+  hero_image: '',
   company_name: 'Eduardo Vieira Imóveis',
   company_address: 'João Pessoa, Paraíba',
   company_instagram: 'https://www.instagram.com/eduardovieiraimoveis/',

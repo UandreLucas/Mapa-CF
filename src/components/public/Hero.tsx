@@ -1,16 +1,16 @@
 import Image from 'next/image'
 import { SearchBar } from './SearchBar'
 
-const HERO_IMAGE =
-  'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1920&q=80'
+const DEFAULT_HERO_IMAGE = '/hero.webp'
 
-export function Hero() {
+export function Hero({ imageUrl }: { imageUrl?: string | null }) {
+  const heroImage = imageUrl && imageUrl.trim() ? imageUrl : DEFAULT_HERO_IMAGE
   return (
     <section className="relative flex min-h-[88vh] items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <Image
-          src={HERO_IMAGE}
+          src={heroImage}
           alt="Imóvel de alto padrão em João Pessoa"
           fill
           priority
