@@ -98,7 +98,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   broker_phone: '(83) 8650-4782',
   broker_whatsapp: '558386504782',
   broker_email: 'corretoreduardovieira@gmail.com',
-  broker_avatar: '',
+  broker_avatar: '/broker.png',
   hero_image: '',
   company_name: 'Eduardo Vieira Imóveis',
   company_address: 'João Pessoa, Paraíba',
