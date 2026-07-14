@@ -13,8 +13,7 @@ export const metadata: Metadata = {
     'Conheça Eduardo Vieira, especialista em imóveis de alto padrão em João Pessoa, com mais de 10 anos de experiência e atendimento personalizado.',
 }
 
-const ABOUT_IMAGE =
-  'https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1000&q=80'
+const ABOUT_IMAGE = '/broker.png'
 
 const STATS = [
   { value: '+10', label: 'anos de mercado' },

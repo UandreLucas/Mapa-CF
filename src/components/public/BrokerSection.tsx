@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button'
 import { buildWhatsAppUrl } from '@/lib/utils'
 import type { SiteSettings } from '@/types'
 
-const BROKER_IMAGE =
-  'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&q=80'
+const DEFAULT_BROKER_IMAGE = '/broker.png'
 
 const HIGHLIGHTS = [
   'Especialista em imóveis de alto padrão',
@@ -27,7 +26,7 @@ export function BrokerSection({ settings }: BrokerSectionProps) {
         <div className="relative">
           <div className="relative aspect-[4/5] overflow-hidden rounded-lg shadow-2xl">
             <Image
-              src={BROKER_IMAGE}
+              src={settings.broker_avatar?.trim() ? settings.broker_avatar : DEFAULT_BROKER_IMAGE}
               alt={settings.broker_name}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
