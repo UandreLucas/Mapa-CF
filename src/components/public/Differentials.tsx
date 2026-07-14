@@ -22,7 +22,7 @@ const ITEMS = [
   },
   {
     icon: Award,
-    title: 'Mais de 10 anos de mercado',
+    title: 'Mais de 15 anos de mercado',
     description:
       'Experiência consolidada nos bairros mais valorizados de João Pessoa.',
   },

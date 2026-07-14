@@ -34,7 +34,7 @@ export function BrokerSection({ settings }: BrokerSectionProps) {
             />
           </div>
           <div className="absolute -bottom-6 -right-6 hidden rounded-lg bg-brand-navy p-6 text-white shadow-xl md:block">
-            <p className="font-serif text-4xl font-semibold text-brand-gold">+10</p>
+            <p className="font-serif text-4xl font-semibold text-brand-gold">+15</p>
             <p className="text-sm text-white/70">anos de experiência</p>
           </div>
         </div>

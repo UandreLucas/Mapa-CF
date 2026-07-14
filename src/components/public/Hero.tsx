@@ -43,7 +43,7 @@ export function Hero({ imageUrl }: { imageUrl?: string | null }) {
         {/* Quick stats */}
         <div className="mt-12 flex flex-wrap gap-x-12 gap-y-6 text-white">
           <div>
-            <p className="font-serif text-3xl font-semibold text-brand-gold">+10</p>
+            <p className="font-serif text-3xl font-semibold text-brand-gold">+15</p>
             <p className="text-sm text-white/70">anos de experiência</p>
           </div>
           <div>

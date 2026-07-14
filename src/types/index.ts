@@ -106,7 +106,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   company_facebook: '',
   company_youtube: '',
   company_bio:
-    'Especialista em imóveis de alto padrão em João Pessoa há mais de 10 anos. Atendimento personalizado, curadoria exclusiva e acompanhamento completo em todas as etapas.',
+    'Especialista em imóveis de alto padrão em João Pessoa há mais de 15 anos. Atendimento personalizado, curadoria exclusiva e acompanhamento completo em todas as etapas.',
   whatsapp_default_message:
     'Olá, Eduardo! Gostaria de mais informações sobre um imóvel.',
   seo_title: 'Eduardo Vieira Imóveis | Imóveis de Alto Padrão em João Pessoa',
