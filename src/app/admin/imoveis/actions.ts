@@ -102,6 +102,86 @@ export async function updateProperty(id: string, values: PropertyFormValues) {
   return { success: true, id }
 }
 
+export async function duplicateProperty(id: string) {
+  const { supabase, user } = await requireUser()
+
+  // Load the original property with its images and features
+  const { data: original, error: loadError } = await supabase
+    .from('properties')
+    .select('*, images:property_images(*), property_features(feature_id)')
+    .eq('id', id)
+    .single()
+
+  if (loadError || !original) {
+    return { error: loadError?.message || 'Imóvel não encontrado' }
+  }
+
+  const {
+    id: _id,
+    images,
+    property_features,
+    created_at: _c,
+    updated_at: _u,
+    deleted_at: _d,
+    views_count: _v,
+    slug: _s,
+    code: _code,
+    title,
+    ...rest
+  } = original as Record<string, unknown> & {
+    images?: { url: string; alt: string | null; is_cover: boolean; display_order: number }[]
+    property_features?: { feature_id: string }[]
+    title: string
+  }
+
+  const newCode = generatePropertyCode()
+  const newTitle = `${title} (cópia)`
+  const newSlug = `${slugify(newTitle)}-${newCode.toLowerCase()}`
+
+  const { data: created, error: insertError } = await supabase
+    .from('properties')
+    .insert({
+      ...rest,
+      title: newTitle,
+      code: newCode,
+      slug: newSlug,
+      status: 'draft',
+      broker_id: user.id,
+    })
+    .select()
+    .single()
+
+  if (insertError || !created) {
+    return { error: insertError?.message || 'Erro ao duplicar imóvel' }
+  }
+
+  // Copy images
+  if (images?.length) {
+    await supabase.from('property_images').insert(
+      images.map((img) => ({
+        property_id: created.id,
+        url: img.url,
+        alt: img.alt,
+        is_cover: img.is_cover,
+        display_order: img.display_order,
+      }))
+    )
+  }
+
+  // Copy features
+  if (property_features?.length) {
+    await supabase.from('property_features').insert(
+      property_features.map((pf) => ({
+        property_id: created.id,
+        feature_id: pf.feature_id,
+      }))
+    )
+  }
+
+  revalidatePath('/admin/imoveis')
+  return { success: true, id: created.id }
+}
+
 export async function deleteProperty(id: string) {
   const { supabase } = await requireUser()
   // Soft delete

@@ -10,6 +10,7 @@ import {
   Eye,
   Star,
   CheckCircle2,
+  Copy,
 } from 'lucide-react'
 import {
   DropdownMenu,
@@ -32,6 +33,7 @@ import {
   deleteProperty,
   updatePropertyStatus,
   togglePropertyFlag,
+  duplicateProperty,
 } from '@/app/admin/imoveis/actions'
 import {
   formatCurrency,
@@ -83,6 +85,21 @@ export function PropertiesTable({
         toast({ variant: 'destructive', title: 'Erro', description: res.error })
       } else {
         toast({ variant: 'success', title: 'Status atualizado' })
+      }
+    })
+  }
+
+  const handleDuplicate = (p: PropertyWithImages) => {
+    startTransition(async () => {
+      const res = await duplicateProperty(p.id)
+      if (res.error) {
+        toast({ variant: 'destructive', title: 'Erro', description: res.error })
+      } else {
+        toast({
+          variant: 'success',
+          title: 'Imóvel duplicado',
+          description: 'Uma cópia foi criada como rascunho.',
+        })
       }
     })
   }
@@ -200,6 +217,9 @@ export function PropertiesTable({
                             <Link href={`/imoveis/${p.slug}`} target="_blank">
                               <Eye className="h-4 w-4" /> Ver no site
                             </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleDuplicate(p)}>
+                            <Copy className="h-4 w-4" /> Duplicar
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           {p.status !== 'published' && (
