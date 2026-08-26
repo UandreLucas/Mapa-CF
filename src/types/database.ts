@@ -224,6 +224,67 @@ export interface ImportError {
  * Minimal Supabase Database typing. Tables map to their row interfaces.
  * Insert/Update use Partial where the DB provides defaults.
  */
+/* ─── Developments (empreendimentos) ─── */
+
+export type DevelopmentStage = 'launch' | 'construction' | 'ready'
+
+export interface DevelopmentUnit {
+  name: string
+  area: number | null
+  bedrooms: number | null
+  suites: number | null
+  parking: number | null
+  price_from: number | null
+  image: string
+}
+
+export interface DevelopmentDifferential {
+  icon: string
+  title: string
+  text: string
+}
+
+export interface DevelopmentAmenity {
+  icon: string
+  name: string
+}
+
+export interface DevelopmentImage {
+  url: string
+  alt: string
+}
+
+export interface Development {
+  id: string
+  slug: string
+  name: string
+  tagline: string | null
+  developer: string | null
+  neighborhood: string | null
+  city: string | null
+  state: string | null
+  address: string | null
+  map_embed_url: string | null
+  price_from: number | null
+  stage: DevelopmentStage
+  delivery_date: string | null
+  description: string | null
+  target_audience: string | null
+  differentials: DevelopmentDifferential[] | null
+  amenities: DevelopmentAmenity[] | null
+  units: DevelopmentUnit[] | null
+  images: DevelopmentImage[] | null
+  cover_image_url: string | null
+  video_url: string | null
+  is_published: boolean
+  is_featured: boolean
+  display_order: number
+  seo_title: string | null
+  seo_description: string | null
+  created_at: string
+  updated_at: string
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -304,6 +365,11 @@ export interface Database {
         Row: ImportJob
         Insert: Partial<ImportJob>
         Update: Partial<ImportJob>
+      }
+      developments: {
+        Row: Development
+        Insert: Partial<Development> & { slug: string; name: string }
+        Update: Partial<Development>
       }
     }
     Views: Record<string, never>

@@ -27,6 +27,7 @@ import {
   formatCurrency,
   getPropertyTypeLabel,
   absoluteUrl,
+  toEmbedUrl,
 } from '@/lib/utils'
 import type { PropertyFull, SiteSettings } from '@/types'
 
@@ -398,15 +399,4 @@ function DetailRow({
       <dd className="text-sm font-medium text-foreground">{value}</dd>
     </div>
   )
-}
-
-function toEmbedUrl(url: string): string {
-  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/)
-  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`
-  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
-  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`
-  // Google Drive: drive.google.com/file/d/FILE_ID/view  ->  /preview
-  const driveMatch = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([\w-]+)/)
-  if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`
-  return url
 }

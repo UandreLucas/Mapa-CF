@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Hero } from '@/components/public/Hero'
@@ -11,6 +12,7 @@ import { Testimonials } from '@/components/public/Testimonials'
 import { ContactForm } from '@/components/public/ContactForm'
 import {
   getFeaturedProperties,
+  getFeaturedDevelopments,
   getPropertiesBy,
   getPropertiesByPurpose,
   getRecentProperties,
@@ -18,6 +20,7 @@ import {
   getTestimonials,
 } from '@/lib/queries'
 import { getSettings } from '@/lib/settings'
+import { formatCurrency, getDevelopmentStageLabel } from '@/lib/utils'
 
 export const revalidate = 300
 
@@ -32,6 +35,7 @@ export default async function HomePage() {
     recent,
     neighborhoods,
     testimonials,
+    developments,
   ] = await Promise.all([
     getSettings(),
     getFeaturedProperties(8),
@@ -42,6 +46,7 @@ export default async function HomePage() {
     getRecentProperties(4),
     getNeighborhoodsWithCounts(),
     getTestimonials(),
+    getFeaturedDevelopments(3),
   ])
 
   return (
@@ -82,6 +87,71 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {developments.length > 0 && (
+        <section className="section-padding">
+          <div className="container-wide">
+            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+              <SectionHeading
+                eyebrow="Lançamentos"
+                title="Empreendimentos selecionados"
+                description="Projetos novos em João Pessoa, com plantas, lazer e condições especiais de lançamento."
+              />
+              <Link
+                href="/empreendimentos"
+                className="group flex shrink-0 items-center gap-2 text-sm font-medium text-brand-navy transition-colors hover:text-brand-gold"
+              >
+                Ver todos os empreendimentos
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
+              {developments.map((dev) => (
+                <Link
+                  key={dev.id}
+                  href={`/empreendimentos/${dev.slug}`}
+                  className="group relative flex aspect-[3/4] flex-col justify-end overflow-hidden rounded-xl"
+                >
+                  <Image
+                    src={
+                      dev.cover_image_url ||
+                      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'
+                    }
+                    alt={dev.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+
+                  <div className="relative z-10 p-6 text-white">
+                    <span className="rounded bg-brand-gold px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-brand-navy">
+                      {getDevelopmentStageLabel(dev.stage)}
+                    </span>
+                    <h3 className="mt-3 font-serif text-2xl font-medium leading-tight">
+                      {dev.name}
+                    </h3>
+                    {dev.neighborhood && (
+                      <p className="mt-1 text-sm text-white/80">
+                        {dev.neighborhood}, {dev.city}
+                      </p>
+                    )}
+                    {dev.price_from ? (
+                      <p className="mt-3 text-sm text-white/90">
+                        A partir de{' '}
+                        <strong className="font-semibold text-brand-gold-light">
+                          {formatCurrency(dev.price_from)}
+                        </strong>
+                      </p>
+                    ) : null}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {luxury.length > 0 && (
         <PropertySection

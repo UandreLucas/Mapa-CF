@@ -4,6 +4,7 @@ import type {
   PropertyWithImages,
   LeadWithProperty,
   Property,
+  Development,
 } from '@/types'
 
 export async function getDashboardStats(): Promise<DashboardStats> {
@@ -185,6 +186,16 @@ export async function getAdminNeighborhoods() {
     .select('*')
     .order('display_order', { ascending: true })
   return data ?? []
+}
+
+export async function getAdminDevelopments(): Promise<Development[]> {
+  const supabase = createClient()
+  const { data } = await supabase
+    .from('developments')
+    .select('*')
+    .order('display_order', { ascending: true })
+    .order('created_at', { ascending: false })
+  return (data ?? []) as Development[]
 }
 
 export async function getAllSettings(): Promise<Record<string, string>> {

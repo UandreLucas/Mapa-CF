@@ -8,6 +8,7 @@ import type {
   Neighborhood,
   Testimonial,
   Feature,
+  Development,
 } from '@/types'
 
 const PROPERTY_SELECT = '*, images:property_images(*)'
@@ -294,5 +295,56 @@ export async function getTestimonials(limit = 6): Promise<Testimonial[]> {
 export async function getAllFeatures(): Promise<Feature[]> {
   const supabase = createClient()
   const { data } = await supabase.from('features').select('*').order('name')
+  return data ?? []
+}
+
+/* ─── Developments (empreendimentos) ─── */
+
+/** Published developments for the public listing. */
+export async function getDevelopments(): Promise<Development[]> {
+  const supabase = createClient()
+  const { data } = await supabase
+    .from('developments')
+    .select('*')
+    .eq('is_published', true)
+    .order('display_order', { ascending: true })
+    .order('created_at', { ascending: false })
+  return (data ?? []) as Development[]
+}
+
+/** Featured developments for the home section. */
+export async function getFeaturedDevelopments(limit = 3): Promise<Development[]> {
+  const supabase = createClient()
+  const { data } = await supabase
+    .from('developments')
+    .select('*')
+    .eq('is_published', true)
+    .eq('is_featured', true)
+    .order('display_order', { ascending: true })
+    .limit(limit)
+  return (data ?? []) as Development[]
+}
+
+export async function getDevelopmentBySlug(
+  slug: string
+): Promise<Development | null> {
+  const supabase = createClient()
+  const { data } = await supabase
+    .from('developments')
+    .select('*')
+    .eq('slug', slug)
+    .maybeSingle()
+  return (data as Development) ?? null
+}
+
+/** Slugs for the sitemap. */
+export async function getAllDevelopmentSlugs(): Promise<
+  { slug: string; updated_at: string }[]
+> {
+  const supabase = createClient()
+  const { data } = await supabase
+    .from('developments')
+    .select('slug, updated_at')
+    .eq('is_published', true)
   return data ?? []
 }

@@ -1,5 +1,9 @@
 import type { MetadataRoute } from 'next'
-import { getAllPublishedSlugs, getNeighborhoods } from '@/lib/queries'
+import {
+  getAllPublishedSlugs,
+  getNeighborhoods,
+  getAllDevelopmentSlugs,
+} from '@/lib/queries'
 import { getSiteUrl } from '@/lib/site-url'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -8,6 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes = [
     '',
     '/imoveis',
+    '/empreendimentos',
     '/bairros',
     '/sobre',
     '/contato',
@@ -24,12 +29,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let propertyRoutes: MetadataRoute.Sitemap = []
   let neighborhoodRoutes: MetadataRoute.Sitemap = []
+  let developmentRoutes: MetadataRoute.Sitemap = []
 
   try {
-    const [properties, neighborhoods] = await Promise.all([
+    const [properties, neighborhoods, developments] = await Promise.all([
       getAllPublishedSlugs(),
       getNeighborhoods(),
+      getAllDevelopmentSlugs(),
     ])
+
+    developmentRoutes = developments.map((d) => ({
+      url: `${baseUrl}/empreendimentos/${d.slug}`,
+      lastModified: new Date(d.updated_at),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }))
 
     propertyRoutes = properties.map((p) => ({
       url: `${baseUrl}/imoveis/${p.slug}`,
@@ -48,5 +62,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Supabase unavailable during build — fall back to static routes only.
   }
 
-  return [...staticRoutes, ...neighborhoodRoutes, ...propertyRoutes]
+  return [
+    ...staticRoutes,
+    ...developmentRoutes,
+    ...neighborhoodRoutes,
+    ...propertyRoutes,
+  ]
 }

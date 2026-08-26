@@ -11,6 +11,7 @@ import type { SiteSettings } from '@/types'
 const NAV_LINKS = [
   { href: '/imoveis?purpose=sale', label: 'Comprar' },
   { href: '/imoveis?purpose=rent', label: 'Alugar' },
+  { href: '/empreendimentos', label: 'Empreendimentos' },
   { href: '/bairros', label: 'Bairros' },
   { href: '/anuncie', label: 'Anuncie' },
   { href: '/avalie', label: 'Avalie seu imóvel' },

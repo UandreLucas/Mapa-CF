@@ -18,9 +18,11 @@ export const contactSchema = z.object({
       'evaluate',
       'schedule',
       'newsletter',
+      'development_interest',
     ])
     .default('contact'),
   property_id: z.string().uuid().nullable().optional(),
+  development_id: z.string().uuid().nullable().optional(),
   best_time: z.string().optional(),
   source: z.string().optional(),
   privacy_consent: z.literal(true, {

@@ -165,7 +165,18 @@ export const LEAD_TYPES = [
   { value: 'evaluate', label: 'Avaliação' },
   { value: 'schedule', label: 'Agendamento' },
   { value: 'newsletter', label: 'Newsletter' },
+  { value: 'development_interest', label: 'Interesse em empreendimento' },
 ] as const
+
+export const DEVELOPMENT_STAGES = [
+  { value: 'launch', label: 'Lançamento' },
+  { value: 'construction', label: 'Em construção' },
+  { value: 'ready', label: 'Pronto para morar' },
+] as const
+
+export function getDevelopmentStageLabel(value: string): string {
+  return DEVELOPMENT_STAGES.find((s) => s.value === value)?.label ?? value
+}
 
 export function getPropertyTypeLabel(value: string): string {
   return PROPERTY_TYPES.find((t) => t.value === value)?.label ?? value
@@ -182,4 +193,19 @@ export function getLeadTypeLabel(value: string): string {
 export function absoluteUrl(path: string): string {
   const base = getSiteUrl()
   return `${base}${path.startsWith('/') ? path : `/${path}`}`
+}
+
+/**
+ * Convert a YouTube / Vimeo / Google Drive share link into its embeddable
+ * URL. Anything else is returned untouched.
+ */
+export function toEmbedUrl(url: string): string {
+  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/)
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`
+  // Google Drive: drive.google.com/file/d/FILE_ID/view  ->  /preview
+  const driveMatch = url.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([\w-]+)/)
+  if (driveMatch) return `https://drive.google.com/file/d/${driveMatch[1]}/preview`
+  return url
 }

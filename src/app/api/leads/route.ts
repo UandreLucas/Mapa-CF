@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
         message: data.message,
         type: data.type,
         property_id: data.property_id || null,
+        development_id: data.development_id || null,
         source: data.source || 'site',
         best_time: data.best_time || null,
         privacy_consent,

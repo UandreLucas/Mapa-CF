@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard,
   Building2,
+  Building,
   Users,
   MapPin,
   Upload,
@@ -23,6 +24,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 const NAV_ITEMS = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { href: '/admin/imoveis', label: 'Imóveis', icon: Building2 },
+  { href: '/admin/empreendimentos', label: 'Empreendimentos', icon: Building },
   { href: '/admin/leads', label: 'Leads', icon: Users },
   { href: '/admin/bairros', label: 'Bairros', icon: MapPin },
   { href: '/admin/importar', label: 'Importar', icon: Upload },

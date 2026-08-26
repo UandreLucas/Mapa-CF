@@ -92,3 +92,61 @@ export const neighborhoodSchema = z.object({
 })
 
 export type NeighborhoodFormValues = z.infer<typeof neighborhoodSchema>
+
+/* ─── Developments (empreendimentos) ─── */
+
+const developmentUnitSchema = z.object({
+  name: z.string(),
+  area: z.number().nullable(),
+  bedrooms: z.number().nullable(),
+  suites: z.number().nullable(),
+  parking: z.number().nullable(),
+  price_from: z.number().nullable(),
+  image: z.string(),
+})
+
+const developmentDifferentialSchema = z.object({
+  icon: z.string(),
+  title: z.string(),
+  text: z.string(),
+})
+
+const developmentAmenitySchema = z.object({
+  icon: z.string(),
+  name: z.string(),
+})
+
+const developmentImageSchema = z.object({
+  url: z.string(),
+  alt: z.string(),
+})
+
+export const developmentSchema = z.object({
+  name: z.string().min(2, 'Informe o nome do empreendimento'),
+  slug: z.string().optional(),
+  tagline: z.string().optional(),
+  developer: z.string().optional(),
+  neighborhood: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  address: z.string().optional(),
+  map_embed_url: z.string().optional(),
+  price_from: z.number().nullable().optional(),
+  stage: z.enum(['launch', 'construction', 'ready']),
+  delivery_date: z.string().optional(),
+  description: z.string().optional(),
+  target_audience: z.string().optional(),
+  differentials: z.array(developmentDifferentialSchema).default([]),
+  amenities: z.array(developmentAmenitySchema).default([]),
+  units: z.array(developmentUnitSchema).default([]),
+  images: z.array(developmentImageSchema).default([]),
+  cover_image_url: z.string().optional(),
+  video_url: z.string().optional(),
+  is_published: z.boolean().default(false),
+  is_featured: z.boolean().default(false),
+  display_order: z.number().default(0),
+  seo_title: z.string().optional(),
+  seo_description: z.string().optional(),
+})
+
+export type DevelopmentFormValues = z.infer<typeof developmentSchema>

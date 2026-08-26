@@ -87,6 +87,11 @@ export function Footer({ settings, neighborhoods = [] }: FooterProps) {
                 </Link>
               </li>
               <li>
+                <Link href="/empreendimentos" className="transition-colors hover:text-brand-gold">
+                  Empreendimentos
+                </Link>
+              </li>
+              <li>
                 <Link href="/anuncie" className="transition-colors hover:text-brand-gold">
                   Anuncie seu imóvel
                 </Link>
