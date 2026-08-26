@@ -4,6 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 import { getSettings } from '@/lib/settings'
+import { getSiteUrl } from '@/lib/site-url'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,7 +20,7 @@ const playfair = Playfair_Display({
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings()
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const siteUrl = getSiteUrl()
 
   return {
     metadataBase: new URL(siteUrl),

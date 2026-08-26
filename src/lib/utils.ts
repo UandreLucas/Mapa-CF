@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { getSiteUrl } from './site-url'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -179,6 +180,6 @@ export function getLeadTypeLabel(value: string): string {
 }
 
 export function absoluteUrl(path: string): string {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const base = getSiteUrl()
   return `${base}${path.startsWith('/') ? path : `/${path}`}`
 }

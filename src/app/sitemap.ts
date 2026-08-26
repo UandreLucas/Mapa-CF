@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { getAllPublishedSlugs, getNeighborhoods } from '@/lib/queries'
+import { getSiteUrl } from '@/lib/site-url'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl = getSiteUrl()
 
   const staticRoutes = [
     '',
