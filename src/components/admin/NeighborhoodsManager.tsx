@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { SingleImageUpload } from '@/components/admin/SingleImageUpload'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -303,15 +304,13 @@ export function NeighborhoodsManager({
               </div>
 
               <div className="space-y-1.5">
-                <Label>URL da imagem de capa (hero)</Label>
-                <Input
+                <Label>Imagem de capa (hero)</Label>
+                <SingleImageUpload
                   value={form.cover_image_url}
-                  onChange={(e) => set({ cover_image_url: e.target.value })}
-                  placeholder="https://..."
+                  onChange={(url) => set({ cover_image_url: url })}
+                  folder="neighborhoods"
+                  previewClassName="h-40"
                 />
-                {form.cover_image_url && (
-                  <img src={form.cover_image_url} alt="preview" className="mt-2 h-32 w-full rounded-lg object-cover" />
-                )}
               </div>
 
               <div className="space-y-1.5">
@@ -436,16 +435,14 @@ export function NeighborhoodsManager({
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">URL da foto</Label>
-                      <Input
+                      <Label className="text-xs">Foto do local</Label>
+                      <SingleImageUpload
                         value={poi.image}
-                        onChange={(e) => setPOI(i, { image: e.target.value })}
-                        placeholder="https://..."
+                        onChange={(url) => setPOI(i, { image: url })}
+                        folder="neighborhoods/pois"
+                        previewClassName="h-28"
                       />
                     </div>
-                    {poi.image && (
-                      <img src={poi.image} alt={poi.name} className="h-24 w-full rounded-md object-cover" />
-                    )}
                   </div>
                 </div>
               ))}
