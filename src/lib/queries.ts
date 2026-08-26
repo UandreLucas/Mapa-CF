@@ -12,6 +12,13 @@ import type {
 
 const PROPERTY_SELECT = '*, images:property_images(*)'
 
+/**
+ * Statuses visible to anonymous visitors. Sold/rented listings stay on the
+ * site as social proof; they are pushed to the end of the listing by
+ * `applyAvailabilityOrder` below.
+ */
+const PUBLIC_STATUSES = ['published', 'sold', 'rented']
+
 function sortToOrder(sort?: string): { column: string; ascending: boolean } {
   switch (sort) {
     case 'price_asc':
@@ -40,8 +47,13 @@ export async function getProperties(
   let query = supabase
     .from('properties')
     .select(PROPERTY_SELECT, { count: 'exact' })
-    .eq('status', 'published')
     .is('deleted_at', null)
+
+  // 'available' hides sold/rented entirely; otherwise they show at the end.
+  query =
+    filters.availability === 'available'
+      ? query.eq('status', 'published')
+      : query.in('status', PUBLIC_STATUSES)
 
   if (filters.purpose && filters.purpose !== 'both') {
     query = query.or(`purpose.eq.${filters.purpose},purpose.eq.both`)
@@ -67,7 +79,12 @@ export async function getProperties(
   }
 
   const order = sortToOrder(filters.sort)
-  query = query.order(order.column, { ascending: order.ascending, nullsFirst: false })
+  // Alphabetically 'published' < 'rented' < 'sold', so ordering by status
+  // ascending keeps available listings ahead of closed ones. It is applied
+  // first so it outranks the user-chosen sort.
+  query = query
+    .order('status', { ascending: true })
+    .order(order.column, { ascending: order.ascending, nullsFirst: false })
 
   const { data, count, error } = await query.range(from, to)
 
@@ -126,7 +143,7 @@ export async function getPropertiesByPurpose(
   const { data } = await supabase
     .from('properties')
     .select(PROPERTY_SELECT)
-    .eq('status', 'published')
+    .in('status', PUBLIC_STATUSES)
     .is('deleted_at', null)
     .or(`purpose.eq.${purpose},purpose.eq.both`)
     .order('created_at', { ascending: false })
@@ -191,7 +208,7 @@ export async function getRelatedProperties(
   const { data } = await supabase
     .from('properties')
     .select(PROPERTY_SELECT)
-    .eq('status', 'published')
+    .in('status', PUBLIC_STATUSES)
     .is('deleted_at', null)
     .eq('neighborhood', property.neighborhood)
     .neq('id', property.id)
@@ -206,7 +223,7 @@ export async function getAllPublishedSlugs(): Promise<
   const { data } = await supabase
     .from('properties')
     .select('slug, updated_at')
-    .eq('status', 'published')
+    .in('status', PUBLIC_STATUSES)
     .is('deleted_at', null)
   return data ?? []
 }
@@ -241,7 +258,7 @@ export async function getNeighborhoodsWithCounts(): Promise<
       const { count } = await supabase
         .from('properties')
         .select('id', { count: 'exact', head: true })
-        .eq('status', 'published')
+        .in('status', PUBLIC_STATUSES)
         .is('deleted_at', null)
         .eq('neighborhood', n.name)
       return { ...n, property_count: count ?? 0 }

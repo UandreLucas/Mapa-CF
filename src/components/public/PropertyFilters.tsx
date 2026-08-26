@@ -54,6 +54,7 @@ function FilterFields({
     bathrooms: searchParams.get('bathrooms') ?? '',
     parking: searchParams.get('parking') ?? '',
     search: searchParams.get('search') ?? '',
+    availability: searchParams.get('availability') ?? '',
   })
 
   useEffect(() => {
@@ -67,6 +68,7 @@ function FilterFields({
       bathrooms: searchParams.get('bathrooms') ?? '',
       parking: searchParams.get('parking') ?? '',
       search: searchParams.get('search') ?? '',
+      availability: searchParams.get('availability') ?? '',
     })
   }, [searchParams])
 
@@ -95,6 +97,7 @@ function FilterFields({
       bathrooms: '',
       parking: '',
       search: '',
+      availability: '',
     })
     router.push(pathname)
     onApply?.()
@@ -232,6 +235,18 @@ function FilterFields({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="border-t border-border pt-4">
+        <label className="flex cursor-pointer items-center gap-2.5 text-sm text-foreground">
+          <input
+            type="checkbox"
+            checked={local.availability === 'available'}
+            onChange={(e) => set('availability', e.target.checked ? 'available' : '')}
+            className="h-4 w-4 rounded border-border accent-brand-gold"
+          />
+          Ocultar vendidos e alugados
+        </label>
       </div>
 
       <div className="flex flex-col gap-2 pt-2">

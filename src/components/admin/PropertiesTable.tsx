@@ -222,7 +222,7 @@ export function PropertiesTable({
                             <Copy className="h-4 w-4" /> Duplicar
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          {p.status !== 'published' && (
+                          {(p.status === 'draft' || p.status === 'archived') && (
                             <DropdownMenuItem
                               onClick={() => changeStatus(p.id, 'published')}
                             >
@@ -236,11 +236,20 @@ export function PropertiesTable({
                               <Pencil className="h-4 w-4" /> Despublicar
                             </DropdownMenuItem>
                           )}
-                          <DropdownMenuItem
-                            onClick={() => changeStatus(p.id, 'sold')}
-                          >
-                            Marcar como vendido
-                          </DropdownMenuItem>
+                          {p.status === 'sold' || p.status === 'rented' ? (
+                            <DropdownMenuItem
+                              onClick={() => changeStatus(p.id, 'published')}
+                            >
+                              <CheckCircle2 className="h-4 w-4" />
+                              Reverter para disponível
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem
+                              onClick={() => changeStatus(p.id, 'sold')}
+                            >
+                              Marcar como vendido
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             className="text-destructive focus:text-destructive"

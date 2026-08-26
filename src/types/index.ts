@@ -38,6 +38,8 @@ export interface PropertyFilters {
   isLuxury?: boolean
   isLaunch?: boolean
   isFeatured?: boolean
+  /** 'available' hides sold/rented listings; default shows them at the end. */
+  availability?: 'all' | 'available'
   features?: string[]
   search?: string
   sort?: PropertySort

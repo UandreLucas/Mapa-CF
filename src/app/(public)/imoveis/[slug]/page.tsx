@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import {
@@ -15,6 +16,7 @@ import {
   Hash,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PropertyGallery } from '@/components/public/PropertyGallery'
 import { PropertyContactCard } from '@/components/public/PropertyContactCard'
@@ -96,7 +98,7 @@ async function fetchRelated(property: PropertyFull, limit = 3): Promise<Property
     const { data } = await supabase
       .from('properties')
       .select('*, images:property_images(*)')
-      .eq('status', 'published')
+      .in('status', ['published', 'sold', 'rented'])
       .is('deleted_at', null)
       .eq('neighborhood', property.neighborhood)
       .neq('id', property.id)
@@ -114,7 +116,7 @@ export async function generateStaticParams() {
     const { data } = await supabase
       .from('properties')
       .select('slug')
-      .eq('status', 'published')
+      .in('status', ['published', 'sold', 'rented'])
       .is('deleted_at', null)
     return (data ?? []).map((p: { slug: string }) => ({ slug: p.slug }))
   } catch {
@@ -166,6 +168,9 @@ export default async function PropertyDetailPage({
     property.private_area && { icon: Ruler, label: 'Área privativa', value: formatArea(property.private_area) },
   ].filter(Boolean) as { icon: typeof BedDouble; label: string; value: string | number }[]
 
+  const isClosed = property.status === 'sold' || property.status === 'rented'
+  const closedLabel = property.status === 'rented' ? 'Alugado' : 'Vendido'
+
   const purposeLabel =
     property.purpose === 'rent' ? 'Para alugar' :
     property.purpose === 'both' ? 'Venda ou aluguel' : 'À venda'
@@ -177,7 +182,7 @@ export default async function PropertyDetailPage({
     description: property.description,
     url: absoluteUrl(`/imoveis/${property.slug}`),
     image: property.images?.map((i) => i.url) ?? [],
-    ...(property.price && !property.hide_price
+    ...(property.price && !property.hide_price && !isClosed
       ? { offers: { '@type': 'Offer', price: property.price, priceCurrency: 'BRL' } }
       : {}),
     address: {
@@ -198,7 +203,13 @@ export default async function PropertyDetailPage({
       <div className="bg-secondary/30 pt-24">
         <div className="container-wide py-6">
           <div className="mb-5 flex flex-wrap items-center gap-2">
-            <Badge variant="gold">{purposeLabel}</Badge>
+            {isClosed ? (
+              <span className="rounded-md bg-brand-navy px-2.5 py-1 text-xs font-semibold uppercase tracking-wider text-white">
+                {closedLabel}
+              </span>
+            ) : (
+              <Badge variant="gold">{purposeLabel}</Badge>
+            )}
             {property.custom_badge && (
               <span className="rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-semibold text-white">
                 {property.custom_badge}
@@ -220,6 +231,25 @@ export default async function PropertyDetailPage({
           </p>
         </div>
       </div>
+
+      {isClosed && (
+        <div className="container-wide pt-8">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-brand-gold/40 bg-brand-gold/10 px-5 py-4">
+            <p className="text-sm text-brand-navy">
+              <strong className="font-semibold">
+                Este imóvel já foi {property.status === 'rented' ? 'alugado' : 'vendido'}.
+              </strong>{' '}
+              Você pode ver as fotos, mas ele não está mais disponível. Temos outras
+              opções parecidas.
+            </p>
+            <Button asChild variant="gold" size="sm">
+              <Link href={`/imoveis?neighborhood=${encodeURIComponent(property.neighborhood)}&availability=available`}>
+                Ver disponíveis no {property.neighborhood}
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
 
       <div className="container-wide py-8">
         <PropertyGallery images={property.images ?? []} title={property.title} />

@@ -25,6 +25,9 @@ export function PropertyCard({ property, className, priority }: PropertyCardProp
     property.images?.[0]?.url ||
     FALLBACK_IMAGE
 
+  const isClosed = property.status === 'sold' || property.status === 'rented'
+  const closedLabel = property.status === 'rented' ? 'Alugado' : 'Vendido'
+
   const purposeLabel =
     property.purpose === 'rent'
       ? 'Aluguel'
@@ -53,8 +56,20 @@ export function PropertyCard({ property, className, priority }: PropertyCardProp
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={priority}
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className={cn(
+            'object-cover transition-transform duration-700 group-hover:scale-105',
+            isClosed && 'grayscale'
+          )}
         />
+
+        {/* Sold/rented seal */}
+        {isClosed && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25">
+            <span className="-rotate-6 rounded border-2 border-white/90 px-4 py-1.5 text-lg font-bold uppercase tracking-[0.2em] text-white drop-shadow-md">
+              {closedLabel}
+            </span>
+          </div>
+        )}
 
         {/* Top badges */}
         <div className="absolute left-3 top-3 flex flex-wrap gap-2">
@@ -79,12 +94,14 @@ export function PropertyCard({ property, className, priority }: PropertyCardProp
           />
         </button>
 
-        {/* Purpose ribbon */}
-        <div className="absolute bottom-3 left-3">
-          <span className="rounded bg-brand-navy/90 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur">
-            {purposeLabel}
-          </span>
-        </div>
+        {/* Purpose ribbon — the seal already labels closed listings */}
+        {!isClosed && (
+          <div className="absolute bottom-3 left-3">
+            <span className="rounded bg-brand-navy/90 px-2.5 py-1 text-xs font-medium uppercase tracking-wider text-white backdrop-blur">
+              {purposeLabel}
+            </span>
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5">

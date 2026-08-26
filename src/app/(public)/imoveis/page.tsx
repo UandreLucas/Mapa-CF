@@ -32,6 +32,7 @@ function parseFilters(sp: PageProps['searchParams']): Filters {
     parking: sp.parking ? Number(sp.parking) : undefined,
     isLuxury: sp.isLuxury === 'true' || undefined,
     isLaunch: sp.isLaunch === 'true' || undefined,
+    availability: sp.availability === 'available' ? 'available' : undefined,
     search: sp.search,
     sort: (sp.sort as Sort) || 'recent',
     page: sp.page ? Number(sp.page) : 1,
