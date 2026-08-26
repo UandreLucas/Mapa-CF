@@ -4,9 +4,9 @@ import { LeadForm } from '@/components/public/LeadForm'
 import { SectionHeading } from '@/components/public/SectionHeading'
 
 export const metadata: Metadata = {
-  title: 'Avalie seu imóvel gratuitamente',
+  title: 'Avalie seu imóvel',
   description:
-    'Descubra o valor de mercado do seu imóvel em João Pessoa. Avaliação gratuita e sem compromisso com Eduardo Vieira, especialista em alto padrão.',
+    'Descubra o valor de mercado do seu imóvel em João Pessoa. Avaliação sem compromisso com Eduardo Vieira, especialista em alto padrão.',
 }
 
 const POINTS = [
@@ -23,7 +23,7 @@ const POINTS = [
   {
     icon: ShieldCheck,
     title: 'Sem compromisso',
-    text: 'A avaliação é gratuita e você decide os próximos passos com liberdade.',
+    text: 'Você decide os próximos passos com total liberdade.',
   },
   {
     icon: Clock,
@@ -37,13 +37,13 @@ export default function AvaliePage() {
     <>
       <div className="bg-brand-navy pb-12 pt-32">
         <div className="container-wide">
-          <p className="eyebrow mb-3 text-brand-gold-light">Avaliação gratuita</p>
+          <p className="eyebrow mb-3 text-brand-gold-light">Avaliação de imóveis</p>
           <h1 className="font-serif text-3xl font-medium text-white md:text-5xl">
             Quanto vale o seu imóvel?
           </h1>
           <p className="mt-4 max-w-2xl text-white/70">
-            Descubra o valor de mercado do seu imóvel com uma avaliação criteriosa
-            e gratuita, feita por quem conhece os bairros nobres de João Pessoa.
+            Descubra o valor de mercado do seu imóvel com uma avaliação criteriosa,
+            feita por quem conhece os bairros nobres de João Pessoa.
           </p>
         </div>
       </div>

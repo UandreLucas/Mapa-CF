@@ -38,7 +38,7 @@ export function AdvertiseCTA() {
             variant="outline"
             className="border-white/40 bg-transparent text-white hover:bg-white hover:text-brand-navy"
           >
-            <Link href="/avalie">Avaliar gratuitamente</Link>
+            <Link href="/avalie">Avaliar meu imóvel</Link>
           </Button>
         </div>
       </div>

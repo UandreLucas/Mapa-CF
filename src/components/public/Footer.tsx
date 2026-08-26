@@ -93,7 +93,7 @@ export function Footer({ settings, neighborhoods = [] }: FooterProps) {
               </li>
               <li>
                 <Link href="/avalie" className="transition-colors hover:text-brand-gold">
-                  Avaliação gratuita
+                  Avalie seu imóvel
                 </Link>
               </li>
               <li>
