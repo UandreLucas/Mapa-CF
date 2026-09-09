@@ -111,7 +111,9 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
           className="max-w-6xl border-none bg-transparent p-0 shadow-none"
         >
           <div className="relative">
-            <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black">
+            {/* Height follows the viewport so portrait photos fill the screen
+                instead of shrinking inside a landscape box. */}
+            <div className="relative h-[72vh] w-full overflow-hidden rounded-lg bg-black sm:h-[80vh]">
               <Image
                 src={gallery[current].url}
                 alt={gallery[current].alt || title}
@@ -123,7 +125,7 @@ export function PropertyGallery({ images, title }: PropertyGalleryProps) {
 
             <button
               onClick={() => setLightboxOpen(false)}
-              className="absolute -top-12 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+              className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-colors hover:bg-black/70 sm:-top-12 sm:right-0 sm:bg-white/10 sm:hover:bg-white/20"
               aria-label="Fechar"
             >
               <X className="h-5 w-5" />

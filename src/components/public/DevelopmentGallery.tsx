@@ -91,7 +91,9 @@ export function DevelopmentGallery({
       {/* Lightbox */}
       <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
         <DialogContent className="max-w-5xl border-none bg-transparent p-0 shadow-none">
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg bg-black">
+          {/* Height follows the viewport so portrait photos fill the screen
+              instead of shrinking inside a landscape box. */}
+          <div className="relative h-[72vh] w-full overflow-hidden rounded-lg bg-black sm:h-[80vh]">
             {images[current] && (
               <Image
                 src={images[current].url}
@@ -106,7 +108,7 @@ export function DevelopmentGallery({
               type="button"
               onClick={() => setLightboxOpen(false)}
               aria-label="Fechar"
-              className="absolute right-3 top-3 rounded-full bg-black/60 p-2 text-white hover:bg-black/80"
+              className="absolute right-3 top-3 z-10 rounded-full bg-black/60 p-2 text-white backdrop-blur hover:bg-black/80"
             >
               <X className="h-5 w-5" />
             </button>
