@@ -11,6 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
+import { trackLead } from '@/lib/analytics'
 import type { LeadType } from '@/types'
 
 interface LeadFormProps {
@@ -59,6 +60,9 @@ export function LeadForm({
         }),
       })
       if (!res.ok) throw new Error()
+
+      trackLead({ content_name: type })
+
       toast({
         variant: 'success',
         title: 'Recebemos sua solicitação!',

@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
+import { trackLead } from '@/lib/analytics'
 
 interface DevelopmentLeadFormProps {
   developmentId: string
@@ -71,6 +72,8 @@ export function DevelopmentLeadForm({
       })
 
       if (!res.ok) throw new Error('request failed')
+
+      trackLead({ content_name: developmentName })
 
       toast({
         variant: 'success',

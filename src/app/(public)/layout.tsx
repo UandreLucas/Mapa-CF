@@ -3,6 +3,7 @@ import { Footer } from '@/components/public/Footer'
 import { WhatsAppButton } from '@/components/public/WhatsAppButton'
 import { getSettings } from '@/lib/settings'
 import { getNeighborhoods } from '@/lib/queries'
+import { MetaPixel } from '@/components/analytics/MetaPixel'
 
 export default async function PublicLayout({
   children,
@@ -16,6 +17,7 @@ export default async function PublicLayout({
 
   return (
     <>
+      <MetaPixel />
       <Header settings={settings} />
       <main className="min-h-screen">{children}</main>
       <Footer settings={settings} neighborhoods={neighborhoods} />
